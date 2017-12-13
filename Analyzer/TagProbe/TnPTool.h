@@ -399,6 +399,8 @@ public:
 			vec_HistFail.push_back( hTempFail );
 		}
 
+		Double_t nEventPassAllBin = 0;
+		Double_t nEventTotalAllBin = 0;
 		for(Int_t i=0; i<nBin; i++)
 		{
 			Int_t i_bin = i+1;
@@ -407,6 +409,10 @@ public:
 			Double_t nEventFail = this->CountEvent( vec_HistFail[i] );
 
 			Double_t nEventTotal = nEventPass + nEventFail;
+
+			nEventPassAllBin += nEventPass;
+			nEventTotalAllBin += nEventTotal;
+
 			Double_t Eff = 0;
 			Double_t AbsUncEff = 0;
 			if( nEventTotal == 0 || nEventPass == 0 )
@@ -424,9 +430,12 @@ public:
 			hEff->SetBinContent(i_bin, Eff);
 			hEff->SetBinError(i_bin, AbsUncEff);
 
-			printf("[%02d bin: from %.1lf to %.1lf] (Eff, Eff_Err, nEventPass, nEventTotal) = (%.3lf, %.3lf, %.1lf, %.1lf)\n", 
-				i_bin, hEff->GetBinLowEdge(i_bin), hEff->GetBinLowEdge(i_bin+1), Eff, AbsUncEff, nEventPass, nEventTotal);
+			// printf("[%02d bin: from %.1lf to %.1lf] (Eff, Eff_Err, nEventPass, nEventTotal) = (%.3lf, %.3lf, %.1lf, %.1lf)\n", 
+			// 	i_bin, hEff->GetBinLowEdge(i_bin), hEff->GetBinLowEdge(i_bin+1), Eff, AbsUncEff, nEventPass, nEventTotal);
 		}
+
+		Double_t effSingleValue = nEventPassAllBin / nEventTotalAllBin;
+		printf("[Variable = %s] Single efficiency value = %.4lf\n", varName.Data(), effSingleValue );
 
 		return hEff;
 	}
