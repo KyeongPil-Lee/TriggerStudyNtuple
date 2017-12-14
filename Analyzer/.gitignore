@@ -1,4 +1,7 @@
-# *og file
+# root files
+*.root
+
+# log file
 *.log
 
 # Plots, Big files...
